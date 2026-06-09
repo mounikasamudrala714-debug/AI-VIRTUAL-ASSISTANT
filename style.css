@@ -1,0 +1,124 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+
+    /* Beautiful gradient + optional image overlay */
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url("https://images.unsplash.com/photo-1519681393784-d120267933ba") center/cover no-repeat;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+}
+
+/* Smaller chat container */
+.chat-container {
+    width: 420px;
+    /* reduced from 700px */
+    height: 600px;
+    /* reduced from 800px */
+
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 18px;
+
+    padding: 15px;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    text-align: center;
+    color: #e91e63;
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/* Chat box reduced height */
+.chat-box {
+    height: 420px;
+    /* reduced */
+    overflow-y: auto;
+
+    background: white;
+
+    border: 1px solid #ffc1e3;
+    border-radius: 12px;
+
+    padding: 12px;
+}
+
+/* Messages */
+.user-message {
+    background: #4f46e5;
+    color: white;
+
+    padding: 10px 12px;
+    border-radius: 12px;
+
+    width: fit-content;
+    max-width: 75%;
+
+    margin-left: auto;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.bot-message {
+    background: #ffe4f1;
+    color: black;
+
+    padding: 10px 12px;
+    border-radius: 12px;
+
+    width: fit-content;
+    max-width: 75%;
+
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+/* Input area */
+.input-area {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+input {
+    flex: 1;
+
+    padding: 10px;
+
+    border: 2px solid #ff99cc;
+    border-radius: 10px;
+
+    font-size: 14px;
+}
+
+button {
+    padding: 10px 16px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #e91e63;
+    color: white;
+
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    background: #d81b60;
+}
