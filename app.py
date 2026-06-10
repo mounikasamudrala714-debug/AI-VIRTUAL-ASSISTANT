@@ -1,58 +1,64 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify
 from datetime import datetime
-from flask_cors import CORS
-import os
+import time
 
-app = Flask(__name__)
-CORS(app)
-
-FRONTEND_FOLDER = os.path.join(
-    os.path.dirname(os.path.dirname(__file__)),
-    "frontend"
+app = Flask(
+    __name__,
+    template_folder="../frontend",
+    static_folder="../frontend"
 )
 
 @app.route("/")
 def home():
-    return send_from_directory(FRONTEND_FOLDER, "index.html")
-
-@app.route("/style.css")
-def style():
-    return send_from_directory(FRONTEND_FOLDER, "style.css")
-
-@app.route("/script.js")
-def script():
-    return send_from_directory(FRONTEND_FOLDER, "script.js")
-
-@app.route("/flower.jpg")
-def flower():
-    return send_from_directory(FRONTEND_FOLDER, "flower.jpg")
+    return render_template("index.html")
 
 @app.route("/chat", methods=["POST"])
 def chat():
 
     data = request.get_json()
-
     message = data["message"].lower()
 
     if "hello" in message or "hi" in message:
-        reply = "Hello! Nice to meet you."
+        reply = "Hello! How can I help you today?"
 
-    elif "time" in message:
-        reply = datetime.now().strftime("%I:%M:%S %p")
+    elif "how are you" in message:
+        reply = "I am doing great. Thank you for asking."
 
-    elif "date" in message:
-        reply = datetime.now().strftime("%d-%m-%Y")
-
-    elif "who are you" in message:
+    elif "your name" in message:
         reply = "I am your AI Virtual Assistant."
 
-    elif "bye" in message:
-        reply = "Goodbye! Have a wonderful day."
+    elif "python" in message:
+        reply = "Python is a powerful programming language used in AI, automation, data science, and web development."
+
+    elif "html" in message:
+        reply = "HTML is the standard language used to create web pages."
+
+    elif "css" in message:
+        reply = "CSS is used to style and design websites."
+
+    elif "javascript" in message:
+        reply = "JavaScript adds interactivity and dynamic behavior to websites."
+
+    elif "flask" in message:
+        reply = "Flask is a lightweight Python framework used for web applications."
+
+    elif "ai" in message:
+        reply = "Artificial Intelligence allows machines to learn, reason, and solve problems."
+
+    elif "time" in message:
+        reply = f"Current time is {datetime.now().strftime('%I:%M %p')}"
+
+    elif "date" in message:
+        reply = f"Today's date is {datetime.now().strftime('%d-%m-%Y')}"
 
     else:
-        reply = "Sorry, I do not understand that yet."
+        reply = f"You asked: {message}. I am a basic AI assistant. To answer everything like ChatGPT, I need an AI API integration."
 
-    return jsonify({"reply": reply})
+    time.sleep(1.5)
+
+    return jsonify({
+        "reply": reply
+    })
 
 if __name__ == "__main__":
     app.run(debug=True)
