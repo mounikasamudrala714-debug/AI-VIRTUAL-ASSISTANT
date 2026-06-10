@@ -1,41 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Virtual Assistant</title>
 
-    <link rel="stylesheet" href="/style.css">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-    <div class="chat-container">
+    <div class="overlay">
 
-        <h1>🌸 AI Virtual Assistant 🌸</h1>
+        <div class="chat-container">
 
-        <div id="chatBox" class="chat-box">
+            <h1> 🌸 AI Virtual Assistant 🌸</h1>
 
-            <div class="bot-message">
-                Bot: Hello! How can I help you?
+            <div class="top-buttons">
+
+                <button id="theme-btn">
+                    🌙
+                </button>
+
+                <button onclick="clearChat()">
+                    🗑
+                </button>
+
             </div>
 
-        </div>
+            <div id="chat-box"></div>
 
-        <div class="input-area">
+            <div class="suggestions">
 
-            <input type="text" id="userInput" placeholder="Ask me anything...">
+                <button onclick="fillQuestion('What is Python?')">
+                    Python
+                </button>
 
-            <button onclick="sendMessage()">
-                Send
-            </button>
+                <button onclick="fillQuestion('What is AI?')">
+                    AI
+                </button>
+
+                <button onclick="fillQuestion('What is Flask?')">
+                    Flask
+                </button>
+
+            </div>
+
+            <div class="input-area">
+
+                <input type="text" id="user-input" placeholder="Ask me anything...">
+
+                <button onclick="sendMessage()">
+                    Send
+                </button>
+
+                <button id="mic-btn">
+                    🎤
+                </button>
+
+            </div>
 
         </div>
 
     </div>
 
-    <script src="/script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 
