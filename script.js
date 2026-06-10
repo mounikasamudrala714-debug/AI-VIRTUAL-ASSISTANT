@@ -1,73 +1,219 @@
-async function sendMessage() {
+function addMessage(message, className) {
 
-    const input =
-        document.getElementById("userInput");
+    let chatBox =
+        document.getElementById("chat-box");
 
-    const message =
-        input.value.trim();
-
-    if (message === "") {
-        return;
-    }
-
-    const chatBox =
-        document.getElementById("chatBox");
-
-    const userDiv =
+    let div =
         document.createElement("div");
 
-    userDiv.className =
-        "user-message";
+    div.className =
+        "message " + className;
 
-    userDiv.innerHTML =
-        "You: " + message;
+    div.innerText =
+        message;
 
-    chatBox.appendChild(userDiv);
-
-    input.value = "";
-
-    const response =
-        await fetch("/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type":
-                    "application/json"
-            },
-            body: JSON.stringify({
-                message: message
-            })
-        });
-
-    const data =
-        await response.json();
-
-    const botDiv =
-        document.createElement("div");
-
-    botDiv.className =
-        "bot-message";
-
-    botDiv.innerHTML =
-        "Bot: " + data.reply;
-
-    chatBox.appendChild(botDiv);
+    chatBox.appendChild(div);
 
     chatBox.scrollTop =
         chatBox.scrollHeight;
+
+    localStorage.setItem(
+        "chatHistory",
+        chatBox.innerHTML
+    );
 }
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+function showTyping() {
+
+    let chatBox =
+        document.getElementById("chat-box");
+
+    let typing =
+        document.createElement("div");
+
+    typing.id = "typing";
+
+    typing.className = "typing";
+
+    typing.innerText =
+        "Assistant is typing...";
+
+    chatBox.appendChild(typing);
+}
+
+function removeTyping() {
+
+    let typing =
+        document.getElementById("typing");
+
+    if (typing) {
+        typing.remove();
+    }
+}
+
+function speak(text) {
+
+    let speech =
+        new SpeechSynthesisUtterance(text);
+
+    speech.lang = "en-US";
+
+    window.speechSynthesis.speak(
+        speech
+    );
+}
+
+function sendMessage() {
+
+    let input =
+        document.getElementById("user-input");
+
+    let message =
+        input.value.trim();
+
+    if (message === "")
+        return;
+
+    addMessage(
+        "You: " + message,
+        "user"
+    );
+
+    showTyping();
+
+    fetch("/chat", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            message: message
+        })
+    })
+
+        .then(response =>
+            response.json()
+        )
+
+        .then(data => {
+
+            removeTyping();
+
+            addMessage(
+                "Assistant: " +
+                data.reply,
+                "bot"
+            );
+
+            speak(data.reply);
+        });
+
+    input.value = "";
+}
+
+function fillQuestion(text) {
+
+    document
+        .getElementById("user-input")
+        .value = text;
+}
+
+function clearChat() {
+
+    document
+        .getElementById("chat-box")
+        .innerHTML = "";
+
+    localStorage.removeItem(
+        "chatHistory"
+    );
+}
+
+window.onload = () => {
+
+    let history =
+        localStorage.getItem(
+            "chatHistory"
+        );
+
+    if (history) {
 
         document
-            .getElementById("userInput")
-            .addEventListener(
-                "keypress",
-                function (event) {
+            .getElementById("chat-box")
+            .innerHTML = history;
+    }
 
-                    if (event.key === "Enter") {
-                        sendMessage();
-                    }
-                });
-    });
+    speak(
+        "Welcome to AI Virtual Assistant"
+    );
+};
+
+document
+    .getElementById("theme-btn")
+    .addEventListener(
+        "click",
+        () => {
+
+            document.body.classList
+                .toggle("dark-mode");
+
+        });
+
+document
+    .getElementById("user-input")
+    .addEventListener(
+        "keypress",
+        function (event) {
+
+            if (event.key === "Enter") {
+
+                sendMessage();
+
+            }
+
+        });
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+
+    const recognition =
+        new SpeechRecognition();
+
+    recognition.lang =
+        "en-US";
+
+    document
+        .getElementById("mic-btn")
+        .addEventListener(
+            "click",
+            () => {
+
+                recognition.start();
+
+            });
+
+    recognition.onresult =
+        (event) => {
+
+            let transcript =
+                event.results[0][0]
+                    .transcript;
+
+            document
+                .getElementById(
+                    "user-input"
+                )
+                .value =
+                transcript;
+
+            sendMessage();
+
+        };
+
+}
