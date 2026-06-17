@@ -2,10 +2,11 @@ from flask import Flask, render_template, request, jsonify
 from datetime import datetime
 import time
 
+# Tell Flask that HTML and CSS files are right here in the main folder
 app = Flask(
     __name__,
-    template_folder="../frontend",
-    static_folder="../frontend"
+    template_folder=".",
+    static_folder="."
 )
 
 @app.route("/")
